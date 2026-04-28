@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="theme-color" content="#0f172a">
+  <title>Hotel Emergency SOS</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="guest-page">
+
+  <!-- Offline Banner -->
+  <div id="offline-banner" class="offline-banner hidden">
+    ⚠️ You're offline — your alert will be sent automatically when connection restores.
+  </div>
+
+  <!-- Header -->
+  <header class="guest-header">
+    <div class="hotel-brand">🏨 Grand Meridian Hotel</div>
+    <a href="tel:+112" class="emergency-call">📞 Call 112</a>
+  </header>
+
+  <!-- ── SOS ONE-TAP SECTION ── -->
+  <section class="sos-section" id="sos-section">
+    <p class="sos-headline">Need help immediately?</p>
+    <div class="sos-ring-outer">
+      <div class="sos-ring-inner">
+        <button class="sos-btn" id="sos-btn">
+          <span class="sos-label">SOS</span>
+          <small class="sos-sub">Tap for instant response</small>
+        </button>
+      </div>
+    </div>
+    <p class="sos-note">Sends your location and alerts all on-duty staff immediately.</p>
+    <button class="link-btn" id="show-form-btn">Report a specific incident instead →</button>
+  </section>
+
+  <!-- ── FULL INCIDENT FORM ── -->
+  <section class="form-section hidden" id="form-section">
+    <div class="form-card">
+      <h2>🚨 Report Emergency</h2>
+      <p class="form-subtitle">Fill in as much as you can. Help is already being notified.</p>
+
+      <!-- Severity -->
+      <div class="field-label">How urgent is this?</div>
+      <div class="severity-row">
+        <button class="sev-btn critical active" data-sev="Critical">🔴 Critical</button>
+        <button class="sev-btn medium" data-sev="Medium">🟠 Medium</button>
+        <button class="sev-btn low" data-sev="Low">🟡 Low</button>
+      </div>
+      <input type="hidden" id="severity" value="Critical">
+
+      <!-- Type -->
+      <div class="field-group">
+        <label class="field-label">Type of emergency</label>
+        <select id="type">
+          <option value="Medical">🏥 Medical Emergency</option>
+          <option value="Fire">🔥 Fire / Smoke</option>
+          <option value="Security">🔒 Security Threat</option>
+          <option value="Structural">⚠️ Flooding / Gas Leak / Power</option>
+          <option value="Other">❓ Other</option>
+        </select>
+      </div>
+
+      <!-- Location -->
+      <div class="field-row">
+        <div class="field-group">
+          <label class="field-label">Floor</label>
+          <select id="floor">
+            <option>B1 Basement</option>
+            <option>Ground Floor</option>
+            <option>Floor 1</option><option>Floor 2</option><option>Floor 3</option>
+            <option>Floor 4</option><option>Floor 5</option><option>Floor 6</option>
+            <option>Floor 7</option><option selected>Floor 8</option><option>Floor 9</option>
+            <option>Floor 10</option><option>Rooftop</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Room / Area</label>
+          <input type="text" id="room" placeholder="e.g. 812 or Pool area">
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Zone</label>
+        <select id="zone">
+          <option value="Guest Room">Guest Room</option>
+          <option value="Lobby">Lobby</option>
+          <option value="Restaurant">Restaurant</option>
+          <option value="Pool">Pool Area</option>
+          <option value="Gym">Gym</option>
+          <option value="Conference">Conference Room</option>
+          <option value="Parking">Parking / Garage</option>
+          <option value="Corridor">Corridor / Hallway</option>
+          <option value="Kitchen">Kitchen</option>
+          <option value="Elevator">Elevator</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+
+      <!-- Guest Info -->
+      <div class="field-group">
+        <label class="field-label">Your name <span class="optional">(optional)</span></label>
+        <input type="text" id="guestName" placeholder="Full name">
+      </div>
+
+      <div class="field-row">
+        <div class="field-group">
+          <label class="field-label">Phone <span class="optional">(optional)</span></label>
+          <input type="tel" id="phone" placeholder="+1 555 000 0000">
+        </div>
+        <div class="field-group">
+          <label class="field-label">People affected</label>
+          <input type="number" id="peopleCount" placeholder="1" min="1" value="1">
+        </div>
+      </div>
+
+      <!-- Description -->
+      <div class="field-group">
+        <label class="field-label">What is happening?</label>
+        <textarea id="description" rows="3" placeholder="Describe the situation — any injuries, hazards, or things responders should know."></textarea>
+      </div>
+
+      <!-- Photo -->
+      <div class="field-group" style="display:none">
+        <label class="field-label">Attach a photo <span class="optional">(optional)</span></label>
+        <input type="file" id="photo" accept="image/*" capture="environment" class="file-input">
+        <label for="photo" class="file-label">📷 Take or choose photo</label>
+        <div id="photo-preview-wrap" class="hidden"><img id="photo-preview" class="photo-preview-img"></div>
+      </div>
+
+      <!-- GPS -->
+      <div class="gps-row">
+        <button class="link-btn gps-btn" id="gps-btn">📍 Attach my GPS location</button>
+        <span id="gps-status" class="gps-status"></span>
+      </div>
+      <input type="hidden" id="gpsLat"><input type="hidden" id="gpsLng">
+
+      <!-- Submit -->
+      <button class="submit-btn" id="submit-btn">
+        <span id="btn-text">🚨 Send Emergency Alert</span>
+        <span id="btn-spinner" class="hidden">⏳ Sending…</span>
+      </button>
+
+      <button class="link-btn back-btn" id="back-btn">← Back to SOS</button>
+    </div>
+  </section>
+
+  <!-- ── TRACKER SECTION (post-submit) ── -->
+  <section class="tracker-section hidden" id="tracker-section">
+    <div class="tracker-card">
+      <div class="tracker-icon">✅</div>
+      <h2>Alert Received</h2>
+      <p>Staff have been notified. Track your incident status below.</p>
+
+      <div class="incident-id-box">
+        Incident ID: <strong id="incident-id-display">—</strong>
+      </div>
+
+      <div class="status-timeline">
+        <div class="timeline-step" id="step-pending">
+          <div class="step-dot"></div>
+          <div class="step-info">
+            <div class="step-label">Alert sent</div>
+            <div class="step-time" id="time-pending"></div>
+          </div>
+        </div>
+        <div class="timeline-step" id="step-inprogress">
+          <div class="step-dot"></div>
+          <div class="step-info">
+            <div class="step-label">Responder en route</div>
+            <div class="step-time" id="time-inprogress"></div>
+          </div>
+        </div>
+        <div class="timeline-step" id="step-resolved">
+          <div class="step-dot"></div>
+          <div class="step-info">
+            <div class="step-label">Incident resolved</div>
+            <div class="step-time" id="time-resolved"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="assigned-box" id="assigned-box"></div>
+      <div class="notes-box" id="notes-box"></div>
+
+      <button class="link-btn" id="reset-btn" style="margin-top:1.5rem">← Report another incident</button>
+    </div>
+  </section>
+
+  <div id="toast-container"></div>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
