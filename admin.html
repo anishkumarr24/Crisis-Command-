@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crisis Command Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="admin-page">
+
+  <!-- ── LOGIN GATE ── -->
+  <div id="login-gate" class="login-gate">
+    <div class="login-card">
+      <div class="login-logo">🏨</div>
+      <h2>Crisis Command</h2>
+      <p class="login-sub">Admin access only</p>
+      <input type="email" id="login-email" placeholder="Admin email" autocomplete="email">
+      <input type="password" id="login-password" placeholder="Password" autocomplete="current-password">
+      <button class="submit-btn" id="login-btn">Sign In</button>
+      <p id="login-error" class="error-msg hidden"></p>
+      <div class="demo-creds">
+        🔑 Demo Credentials<br>
+        <strong>Email:</strong> admin@hotel.com<br>
+        <strong>Password:</strong> hotel123
+      </div>
+    </div>
+  </div>
+
+  <!-- ── MAIN DASHBOARD (hidden until logged in) ── -->
+  <div id="dashboard" class="hidden">
+
+    <!-- Header -->
+    <header class="admin-header">
+      <div class="admin-brand">
+        <span class="brand-icon">🏨</span>
+        <div>
+          <div class="brand-name">Crisis Command</div>
+          <div class="brand-sub" id="admin-email-display">Grand Meridian Hotel</div>
+        </div>
+      </div>
+      <div class="header-actions">
+        <div class="live-badge"><span class="live-dot"></span>Live</div>
+        <button class="icon-btn" id="broadcast-btn" title="Send broadcast">📢</button>
+        <button class="icon-btn" id="analytics-btn" title="Analytics">📊</button>
+        <button class="icon-btn" id="export-btn" title="Export CSV">⬇ CSV</button>
+        <button class="icon-btn danger" id="logout-btn">Logout</button>
+      </div>
+    </header>
+
+    <!-- Broadcast Panel -->
+    <div id="broadcast-panel" class="broadcast-panel hidden">
+      <div class="broadcast-inner">
+        <h3>📢 Broadcast to Guests</h3>
+        <textarea id="broadcast-msg" rows="3" placeholder="Type your message, e.g. 'Fire drill in progress. Please remain calm.'"></textarea>
+        <div class="broadcast-row">
+          <select id="broadcast-floor">
+            <option value="all">All floors</option>
+            <option>Ground Floor</option><option>Floor 1</option><option>Floor 2</option>
+            <option>Floor 3</option><option>Floor 4</option><option>Floor 5</option>
+            <option>Floor 6</option><option>Floor 7</option><option>Floor 8</option>
+            <option>Floor 9</option><option>Floor 10</option><option>Rooftop</option>
+          </select>
+          <button id="send-broadcast-btn" class="primary-btn">Send</button>
+          <button id="cancel-broadcast-btn" class="ghost-btn">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Analytics Panel -->
+    <div id="analytics-panel" class="analytics-panel hidden">
+      <div class="analytics-inner">
+        <div class="analytics-header">
+          <h3>📊 Incident Analytics</h3>
+          <button id="close-analytics-btn" class="ghost-btn small">Close</button>
+        </div>
+        <div class="chart-wrap">
+          <div class="chart-bars" id="type-chart"></div>
+        </div>
+        <div class="analytics-grid" id="analytics-detail"></div>
+        <div class="analytics-timeline" id="analytics-timeline"></div>
+      </div>
+    </div>
+
+    <!-- Stats Bar -->
+    <section class="stats-bar">
+      <div class="stat-card" id="stat-total"><div class="stat-num">0</div><div class="stat-label">Total</div></div>
+      <div class="stat-card danger" id="stat-pending"><div class="stat-num">0</div><div class="stat-label">Pending</div></div>
+      <div class="stat-card warn" id="stat-inprogress"><div class="stat-num">0</div><div class="stat-label">In Progress</div></div>
+      <div class="stat-card success" id="stat-resolved"><div class="stat-num">0</div><div class="stat-label">Resolved</div></div>
+      <div class="stat-card info" id="stat-avgtime"><div class="stat-num">—</div><div class="stat-label">Avg Response</div></div>
+      <div class="stat-card sos-stat" id="stat-sos"><div class="stat-num">0</div><div class="stat-label">SOS Alerts</div></div>
+    </section>
+
+    <!-- Filters -->
+    <section class="filter-bar">
+      <input type="text" id="search-input" placeholder="🔍 Search room, name, type, floor…">
+      <select id="filter-status">
+        <option value="all">All Status</option>
+        <option value="Pending">Pending</option>
+        <option value="In Progress">In Progress</option>
+        <option value="Resolved">Resolved</option>
+      </select>
+      <select id="filter-type">
+        <option value="all">All Types</option>
+        <option value="Fire">🔥 Fire</option>
+        <option value="Medical">🏥 Medical</option>
+        <option value="Security">🔒 Security</option>
+        <option value="Structural">⚠️ Structural</option>
+        <option value="SOS">🆘 SOS</option>
+        <option value="Other">Other</option>
+      </select>
+      <select id="filter-severity">
+        <option value="all">All Severity</option>
+        <option value="Critical">🔴 Critical</option>
+        <option value="Medium">🟠 Medium</option>
+        <option value="Low">🟡 Low</option>
+      </select>
+      <select id="sort-by">
+        <option value="newest">Newest first</option>
+        <option value="oldest">Oldest first</option>
+        <option value="severity">By severity</option>
+      </select>
+    </section>
+
+    <!-- Alerts Container -->
+    <section class="alerts-container" id="alerts">
+      <div class="empty-state">Waiting for incidents…</div>
+    </section>
+
+    <!-- Broadcast History -->
+    <section class="broadcasts-section">
+      <h3>📡 Broadcast History</h3>
+      <div id="broadcasts-feed"></div>
+    </section>
+
+  </div><!-- end #dashboard -->
+
+  <div id="toast-container"></div>
+  <audio id="alert-sound" preload="auto"></audio>
+
+  <script type="module" src="admin.js"></script>
+</body>
+</html>
